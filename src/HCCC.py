@@ -4,9 +4,12 @@
 from gnt import GNT
 import os
 import zipfile
+import numpy as np
+from PIL import Image
 from matplotlib import pyplot as plt
 
 step = 1000  # 全局变量，每次处理step个图片，防止占用太多内存，可以根据实际情况更改
+threshold = 230  # 二值图阈值
 
 def Getstep(gnt, imgs, labels):
     i = 0
@@ -32,7 +35,17 @@ gnt = GNT(Z, set_name)  # gnt即包含了目标数据集中的所有数据，形
 imgs = [0 for x in range(0, step)]
 labels = [0 for x in range(0, step)]
 Getstep(gnt, imgs, labels)  # 获取数据集中的1000个数据
+table = []
+for i in range(256):
+    if i < threshold:
+        table.append(0)
+    else:
+        table.append(1)
 for i in range(0, step):  # 显示图片，实际训练中不需要
+    imgs[i] = Image.fromarray(imgs[i])
+    imgs[i] = imgs[i].convert('P')
+    imgs[i] = imgs[i].point(table, '1')
+    imgs[i] = imgs[i].resize((64, 64))
     plt.imshow(imgs[i])
     plt.title(labels[i])
     plt.show()
