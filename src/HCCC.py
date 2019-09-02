@@ -46,6 +46,7 @@ for i in range(0, step):  # 显示图片，实际训练中不需要
     imgs[i] = imgs[i].convert('P')
     imgs[i] = imgs[i].point(table, '1')
     imgs[i] = imgs[i].resize((64, 64))
+    imgs[i] = np.array(imgs[i])
     plt.imshow(imgs[i])
     plt.title(labels[i])
     plt.show()
